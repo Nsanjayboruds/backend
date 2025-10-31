@@ -95,7 +95,6 @@ connectDb()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🌍 Health check: https://your-render-backend-url.onrender.com/health`);
     });
   })
   .catch((error) => {
