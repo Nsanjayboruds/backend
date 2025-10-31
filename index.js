@@ -17,11 +17,11 @@ const PORT = process.env.PORT || 3000;
 
 // ✅ Log environment check
 console.log('🔍 Checking environment variables...');
-if (!process.env.VITE_CLERK_SECRET_KEY) {
+if (!process.env.CLERK_SECRET_KEY) {
   console.error('❌ Missing: VITE_CLERK_SECRET_KEY...');
   process.exit(1);
 }
-if (!process.env.VITE_CLERK_PUBLISHABLE_KEY) {
+if (!process.env.CLERK_PUBLISHABLE_KEY) {
   console.error('❌ Missing: VITE_CLERK_PUBLISHABLE_KEY');
   process.exit(1);
 }
