@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import helmet from "helmet"; // ✅ Add this for CSP fix
 import { getJson } from "serpapi";
 import { connectDb } from "./config/db.js";
 import periodTrackingRoutes from "./routes/periodTracking.route.js";
@@ -22,6 +23,28 @@ if (!process.env.CLERK_SECRET_KEY) {
   process.exit(1);
 }
 console.log("✅ Clerk secret key found");
+
+// ✅ Helmet Security Setup (fixes CSP block)
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        connectSrc: ["'self'", "*"], // allow APIs, WebSockets, Clerk, etc.
+        fontSrc: ["'self'", "https:", "data:"],
+        objectSrc: ["'none'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // prevents blocking Clerk SDK & APIs
+  })
+);
+
+// ✅ Optional: Handle favicon requests safely
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 // ✅ Middleware setup
 app.use(
